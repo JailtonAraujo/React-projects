@@ -1,0 +1,49 @@
+{
+  "produts": [
+    {
+      "id": 1,
+      "name": "camisa",
+      "price": 59.9
+    },
+    {
+      "id": 2,
+      "name": "moletom",
+      "price": 100
+    },
+    {
+      "id": 3,
+      "name": "calça",
+      "price": 75.6
+    },
+    {
+      "id": 4,
+      "name": "blusa",
+      "price": 20.9
+    },
+    {
+      "id": 5,
+      "name": "tolca",
+      "price": 80.9
+    },
+    {
+      "id": 6,
+      "name": "tênis",
+      "price": 250
+    },
+    {
+      "name": "Short",
+      "price": "20.3",
+      "id": 7
+    },
+    {
+      "name": "Algma coisa",
+      "price": "20.1",
+      "id": 8
+    },
+    {
+      "name": "gfhfgh",
+      "price": "44",
+      "id": 9
+    }
+  ]
+}

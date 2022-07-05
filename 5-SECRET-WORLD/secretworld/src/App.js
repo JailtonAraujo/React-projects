@@ -32,16 +32,19 @@ function App() {
   const [guesses, setGuesses] = useState(3);
   const [score, setScore] = useState(0);
 
-  const pickedWordAndPickedCategory = () =>{
+  const pickedWordAndPickedCategory = useCallback(() =>{
     const categories = Object.keys(words);
     const category = categories[Math.floor(Math.random() * Object.keys(categories).length)];
 
     const word = words[category][Math.floor(Math.random() * words[category].length)];
 
     return {word, category};
-  }
+  },[words])
 
-  const startGame = () =>{
+  const startGame = useCallback(() =>{
+
+    //clear letters states
+    clearLettersStates();
 
     const {word, category} = pickedWordAndPickedCategory();
 
@@ -49,15 +52,15 @@ function App() {
 
     wordLetters = wordLetters.map((l) => l.toLowerCase());
 
-    console.log(wordLetters)
-
     // fill states
     setPickedWord(word);
     setPickedCategory(category);
     setLetters(wordLetters);
 
     setGameStage(stages[1].name);
-  }
+  },[pickedWordAndPickedCategory])
+
+
 
   const verifyLetter = (letter) =>{
     const normalizedLetter = letter.toLowerCase();
@@ -75,14 +78,43 @@ function App() {
       setWrongLetters((actualWrongLetters)=>[
         ...actualWrongLetters, normalizedLetter
       ]);
+
+      setGuesses((actualGuessed) => actualGuessed - 1);
     }
   }
 
-  console.log(guessedLetters);
-  console.log(wrongLetters);
+  const clearLettersStates = () =>{
+    setGuessedLetters([]);
+    setWrongLetters([]);
+  }
+
+  //Munitora um dados semper que for alterado
+  useEffect(() =>{
+      if(guesses <= 0){
+        clearLettersStates();
+        setGameStage(stages[2].name);
+      }
+  }, [guesses]);
+
+  useEffect(() =>{
+    const uniqueLetters = [...new Set(letters)];
+
+    //win condition
+    if(guessedLetters.length === uniqueLetters.length){
+      
+      //add score
+      setScore((actualScore) => (actualScore += 100));
+
+      //restart game with new word
+      startGame();
+    }
+
+  },[guessedLetters,letters, startGame])
 
   const retry = () =>{
     setGameStage(stages[0].name)
+    setScore(0);
+    setGuesses(3);
   }
 
   return (
@@ -97,7 +129,7 @@ function App() {
       wrongLetters={wrongLetters}
       guesses={guesses}
       score={score}/>}
-      {gameStage === 'end' && <GameOver retry={retry}/>}
+      {gameStage === 'end' && <GameOver retry={retry} score={score}/>}
     </div>
   );
 }
