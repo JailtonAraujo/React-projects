@@ -12,6 +12,8 @@ const NavBar = () => {
 
   const { user } = useAuthValue();
 
+  const { logout } = useAuthentication();
+
   return (
    <nav className={styles.navbar}>
       <NavLink to="/" className={styles.brand}>
@@ -27,8 +29,18 @@ const NavBar = () => {
               </>
             )}
       
+            {user && (
+              <>
+                  <li> <NavLink to="/dashboard" className = {({isActive}) =>(isActive ? styles.active : '')}>Dashboard</NavLink> </li>
+                  <li> <NavLink to="/posts/createpost" className={({isActive})=>(isActive ? styles.active : '')}>Criar poster</NavLink> </li>  
+              </>
+            )}  
 
         <li><NavLink to="/about" className={({isActive})=>(isActive ? styles.active : '')}>Sobre</NavLink> </li>
+              
+        {user && (
+          <li> <button onClick={logout}>Sair</button> </li>
+        )}      
       </ul>
    </nav>
   )

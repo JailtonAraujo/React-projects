@@ -9,6 +9,8 @@ import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
+import Dashboard from './pages/Dashboard/Dashboard';
+import CreatePost from './pages/CreatePost/CreatePost';
 
 //hooks
 import { useAuthentication } from './hooks/useAuthentication';
@@ -45,8 +47,11 @@ function App() {
           <Routes>
             <Route path='/' element={<Home/>}/>
             <Route path='/about' element={<About/>}/>
-            <Route path='/login' element={<Login/>}/>
-            <Route path='/register' element={<Register/>}/>
+            <Route path='/login' element={!user ? <Login/> : <Navigate to="/"/>}/>
+            <Route path='/register' element={!user ? <Register/> : <Navigate to="/"/>}/>
+
+            <Route path='/dashboard' element={user ?  <Dashboard/> : <Navigate to="/"/>}/>
+            <Route path = '/posts/createpost' element={user ? <CreatePost/> : <Navigate to="/"/>}/>
           </Routes>
         </div>
         <Footer/>
