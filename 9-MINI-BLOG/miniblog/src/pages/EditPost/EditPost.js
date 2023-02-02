@@ -1,11 +1,12 @@
-import styles from "./CreatePost.module.css"
+import styles from './EditPost.module.css'
 
-import {useState} from "react"
-import {useNavigate} from "react-router-dom"
+import {useState, useEffect} from "react"
+import {useNavigate, useParams} from "react-router-dom"
 import { useAuthValue} from "../../context/authContext"
-import { useInsertDocument } from "../../hooks/useInsertDocument"
+import { useFetchDocument } from '../../hooks/useFatchDocuments.js'
+import { useUpdatetDocument } from '../../hooks/useUpdateDocument'
 
-const CreatePost = () => {
+const EditPost = () => {
 
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
@@ -14,8 +15,27 @@ const CreatePost = () => {
   const [formError, setFormError] = useState("");
   const {user} = useAuthValue();
   
-  const {insertDocument, response} = useInsertDocument("posts")
+  const {id} = useParams();
+
+  const {documet:post, loading} = useFetchDocument("posts",id);
+
+  useEffect(()=>{
+
+    if(post){
+        setTitle(post.title);
+        setImage(post.image);
+        setBody(post.body);
+
+        const textTags = post.tagsArray.join(", ");
+
+        setTags(textTags);
+    }
+
+  },[post])
+  
+  const {updateDocument, response} = useUpdatetDocument("posts");
   const navigate = useNavigate();
+
 
   const handlerSubmit = (e) =>{
     e.preventDefault();
@@ -35,23 +55,35 @@ const CreatePost = () => {
 
     if(formError) return;
 
-    insertDocument({
-      title,
-      body,
-      tagsArray,
-      image,
-      uid: user.uid,
-      createdBy: user.displayName
-    })
+    const data = {
+        title,
+        body,
+        tagsArray,
+        image,
+        uid: user.uid,
+        createdBy: user.displayName
+      }
 
-    navigate("/");
+      updateDocument(id,data)
+
+    navigate("/dashboard");
 
   };
 
+  if(loading){
+    return <p>Carregando post...</p>
+  }
+
+
   return (
-    <div className={styles.create_post}>
-      <h2>Criar post</h2>
-      <p>Escreva sobre oque quiser e compartilhe seu conhecimento!</p>
+    
+    <div className={styles.edit_post}>
+        
+        {post && (
+            <>
+
+<h2>{`Editando post: ${post.title}`}</h2>
+      <p>Altere os dados do seu post!</p>
       <form onSubmit={handlerSubmit}>
         
         <label>
@@ -77,6 +109,9 @@ const CreatePost = () => {
           />
         </label>
 
+        <p className={styles.preview_title} >Preview da imagem atual:</p>
+        <img  className={styles.preview_img} src={post.image} alt={post.title} />
+
         <label>
           <span>Conteudo:</span>
           <textarea 
@@ -100,13 +135,18 @@ const CreatePost = () => {
           />
         </label>
 
-        {!response.loading &&  <button className="btn">Cadastrar</button> }
+        {!response.loading &&  <button className="btn">Editar</button> }
          {response.loading &&  <button className="btn">Aguarde...</button>}
           {response.error && <p className='error'>{response.error}</p>}
           {formError && <p className='error'>{formError}</p>}
       </form>
+            
+            </>
+        )}
+
     </div>
+
   )
 }
 
-export default CreatePost
+export default EditPost

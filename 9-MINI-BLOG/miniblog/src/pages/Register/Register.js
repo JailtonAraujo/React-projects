@@ -5,13 +5,13 @@ import { useAuthentication } from '../../hooks/useAuthentication';
 
 const Register = () => {
 
-  const [displayname,setDisplayname] = useState("");
+  const [displayName,setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password,setPassword] = useState("");
   const [confirmpassword, setConfirmpassword] = useState("");
   const [error, setError] = useState("");
 
-  const {auth,
+  const {
     createUSer,
     error:authError,
     loading} = useAuthentication();
@@ -22,15 +22,14 @@ const Register = () => {
       setError("");
 
       const user={
-        displayname,
+        displayName,
         email,
         password,
-        confirmpassword
       }
 
       if (password !== confirmpassword){
         setError("As senha precisan ser iguais!");
-        return
+        return;
       }
       
       const res = await createUSer(user);
@@ -56,8 +55,8 @@ const Register = () => {
             type="text"
             name="displayname"
             placeholder="Nome do Usuario"
-            value={displayname}
-            onChange={(e) => setDisplayname(e.target.value)}
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
             required/>
           </label>
 

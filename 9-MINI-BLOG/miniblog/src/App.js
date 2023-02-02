@@ -19,6 +19,9 @@ import { useState, useEffect } from 'react';
 
 //context
 import {AuthProvider} from './context/authContext';
+import Search from './pages/Search/Search';
+import Post from './pages/Post/Post';
+import EditPost from './pages/EditPost/EditPost';
 
 
 function App() {
@@ -48,7 +51,12 @@ function App() {
             <Route path='/' element={<Home/>}/>
             <Route path='/about' element={<About/>}/>
             <Route path='/login' element={!user ? <Login/> : <Navigate to="/"/>}/>
+            <Route path='/search' element={<Search/>} />
+            <Route path='/post/:id' element={<Post/>} />
+
             <Route path='/register' element={!user ? <Register/> : <Navigate to="/"/>}/>
+
+            <Route path='/post/edit/:id' element={user ? <EditPost/> : <Navigate to="/"/>}/>
 
             <Route path='/dashboard' element={user ?  <Dashboard/> : <Navigate to="/"/>}/>
             <Route path = '/posts/createpost' element={user ? <CreatePost/> : <Navigate to="/"/>}/>
