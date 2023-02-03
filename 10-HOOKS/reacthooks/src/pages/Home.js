@@ -11,6 +11,7 @@ import HookUseMemo from "../components/HookUseMemo"
 import HookUseLayoutEffect from "../components/HookUseLayoutEffect"
 import HookUseImperativeHandler from "../components/HookUseImperativeHandler"
 import HookCustom from "../components/HookCustom"
+import EvoqueMessage from "../components/EvoqueMessage"
 
 const Home = () => {
 
@@ -40,6 +41,8 @@ const Home = () => {
         <HookUseImperativeHandler/>
 
         <HookCustom/>
+
+        <EvoqueMessage/>
 
     </div>
   )

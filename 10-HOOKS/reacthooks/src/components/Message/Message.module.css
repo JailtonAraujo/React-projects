@@ -1,0 +1,17 @@
+.message_container{
+    width: 80%;
+    height: 100px;
+    position: fixed;
+    top: 2px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: aquamarine;
+    padding: 1em;
+}
+
+.message{
+    color: brown;
+    font-size: 1.2em;
+}
+
